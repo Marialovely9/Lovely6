@@ -1,0 +1,37 @@
+{
+  using namespace std;
+  assert(f != nullptr);
+  assert(a <= b);
+  assert(0. <= tol);
+  for (auto fa = f(a), fb = f(b);;)
+  {
+    // Проверим значения функции на концах отрезка.
+    if (fa == 0.)
+      return a;
+    if (fb == 0.)
+      return b;
+
+    // Делим отрезок пополам.
+    const auto mid = 0.5 * (a + b); // середина отрезка
+    if (mid <= a || b <= mid)
+      return abs(fa) < abs(fb) ? a : b;
+    if (b - a <= tol)
+      return mid;
+
+    // Выберем одну из половин в качестве уточнённого отрезка.
+    const auto fmid = f(mid);
+    if (signbit(fa) != signbit(fmid))
+    {
+      // Корень на левой половине.
+      b = mid;
+      fb = fmid;
+    }
+    else
+    {
+      assert(signbit(fb) != signbit(fmid));
+      // Корень на правой половине.
+      a = mid;
+      fa = fmid;
+    }
+  }
+}
